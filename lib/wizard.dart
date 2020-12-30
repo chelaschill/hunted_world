@@ -10,18 +10,18 @@ class Wizard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (direction == "right") {
       return Container(
-        height: 160,
-        width: 160,
-        child: Image.asset("images/wizard.png"),
+        height: 125,
+        width: 125,
+        child: Image.asset("images/gatita.png"),
       );
     } else {
       return Transform(
         alignment: Alignment.center,
         transform: Matrix4.rotationY(pi),
         child: Container(
-          height: 160,
-          width: 160,
-          child: Image.asset("images/wizard.png"),
+          height: 130,
+          width: 130,
+          child: Image.asset("images/gatita.png"),
         ),
       );
     }

@@ -11,6 +11,8 @@ class Inicio extends StatefulWidget {
 class _InicioState extends State<Inicio> {
   double wizardX = 0;
   double wizardY = -0.99;
+  double rayoX = -10;
+  double rayoY = -10;
   String direction = "right";
   bool holding = false;
 
@@ -45,6 +47,10 @@ class _InicioState extends State<Inicio> {
   }
 
   void shoot() {
+    setState(() {
+      rayoX = wizardX*0.75;
+      rayoY = wizardY + 0.37;
+    });
   }
 
   @override
@@ -74,7 +80,11 @@ class _InicioState extends State<Inicio> {
                         direction: direction,
                       ),
                     ),
-
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 0),
+                      alignment: Alignment(rayoX, rayoY),
+                      child: Rayo(),
+                    ),
                   ],
                 ),
               ),
