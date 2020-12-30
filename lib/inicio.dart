@@ -15,6 +15,8 @@ class _InicioState extends State<Inicio> {
   double rayoY = -10;
   String direction = "right";
   bool holding = false;
+  double time = 0;
+  double height = 1;
 
   void moveRight() {
     direction = "right";
@@ -47,9 +49,21 @@ class _InicioState extends State<Inicio> {
   }
 
   void shoot() {
-    setState(() {
-      rayoX = wizardX*0.75;
-      rayoY = wizardY + 0.37;
+    time = 0;
+    rayoX = wizardX * 0.75;
+    rayoY = wizardY + 0.37;
+
+    Timer.periodic(Duration(milliseconds: 300), (timer) {
+      time += 0.05;
+      height = 4.9 * time * time;
+      setState(() {
+        rayoY = height;
+      });
+      if(height >= 1){
+        setState(() {
+          rayoY = -10;
+        });
+      }
     });
   }
 
