@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hunted_world/fantasmita.dart';
 import 'package:hunted_world/rayo.dart';
 import 'wizard.dart';
 
@@ -16,7 +17,8 @@ class _InicioState extends State<Inicio> {
   String direction = "right";
   bool holding = false;
   double time = 0;
-  double height = 1;
+  double height = 0;
+  bool lanzando = false;
 
   void moveRight() {
     direction = "right";
@@ -49,23 +51,29 @@ class _InicioState extends State<Inicio> {
   }
 
   void shoot() {
-    time = 0;
-    rayoX = wizardX * 0.75;
-    rayoY = wizardY + 0.37;
+    if (!lanzando) {
+      lanzando = true;
+      time = 0;
+      rayoX = wizardX * 0.75;
+      rayoY = wizardY + 0.37;
 
-    Timer.periodic(Duration(milliseconds: 300), (timer) {
-      time += 0.05;
-      height = 4.9 * time * time;
-      setState(() {
-        rayoY = height;
-      });
-      if(height >= 1){
+      Timer.periodic(Duration(milliseconds: 500), (timer) {
+        time += 0.05;
+        height = 4.9 * time * time;
         setState(() {
-          rayoY = -10;
+          rayoY = height;
         });
-      }
-    });
+        if (height >= 1) {
+          setState(() {
+            rayoY = -10;
+            lanzando = false;
+          });
+        }
+      });
+    }
   }
+
+  void show() {}
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +107,11 @@ class _InicioState extends State<Inicio> {
                       alignment: Alignment(rayoX, rayoY),
                       child: Rayo(),
                     ),
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 0),
+                      alignment: Alignment(0, 0),
+                      child: Fantasmita(),
+                    )
                   ],
                 ),
               ),

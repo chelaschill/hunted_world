@@ -9,6 +9,10 @@ class Fantasmita extends StatefulWidget {
 class _FantasmitaState extends State<Fantasmita> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      height: 75,
+      width: 75,
+      child: Image.asset("images/fantasmita.png"),
+    );
   }
 }
