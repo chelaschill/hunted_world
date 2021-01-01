@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hunted_world/fantasmita.dart';
 import 'package:hunted_world/rayo.dart';
 import 'wizard.dart';
+import 'dart:math';
 
 class Inicio extends StatefulWidget {
   @override
@@ -18,7 +20,14 @@ class _InicioState extends State<Inicio> {
   bool holding = false;
   double time = 0;
   double height = 0;
+  bool crear = false;
   bool lanzando = false;
+  Random random = new Random();
+  List<AnimatedContainer> fantasmitas = [];
+
+  double generateRandom() {
+    return random.nextDouble() * 2 - 1;
+  }
 
   void moveRight() {
     direction = "right";
@@ -57,7 +66,7 @@ class _InicioState extends State<Inicio> {
       rayoX = wizardX * 0.75;
       rayoY = wizardY + 0.37;
 
-      Timer.periodic(Duration(milliseconds: 500), (timer) {
+      Timer.periodic(Duration(milliseconds: 300), (timer) {
         time += 0.05;
         height = 4.9 * time * time;
         setState(() {
@@ -73,7 +82,23 @@ class _InicioState extends State<Inicio> {
     }
   }
 
-  void show() {}
+  List<AnimatedContainer> show() {
+    Timer(Duration(seconds: 10), () {
+      crear = true;
+      if (crear && fantasmitas.length < 10) {
+        fantasmitas.add(
+          AnimatedContainer(
+            duration: Duration(milliseconds: 0),
+            alignment: Alignment(generateRandom(), generateRandom()),
+            child: Fantasmita(),
+          ),
+        );
+        crear = false;
+        print("size: " + fantasmitas.length.toString());
+      }
+    });
+    return fantasmitas;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,11 +132,9 @@ class _InicioState extends State<Inicio> {
                       alignment: Alignment(rayoX, rayoY),
                       child: Rayo(),
                     ),
-                    AnimatedContainer(
-                      duration: Duration(milliseconds: 0),
-                      alignment: Alignment(0, 0),
-                      child: Fantasmita(),
-                    )
+                    Stack(
+                      children: show(),
+                    ),
                   ],
                 ),
               ),
