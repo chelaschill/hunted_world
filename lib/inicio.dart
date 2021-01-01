@@ -20,12 +20,19 @@ class _InicioState extends State<Inicio> {
   bool holding = false;
   double time = 0;
   double height = 0;
-  bool crear = false;
   bool lanzando = false;
+  int tiempo = 0;
   Random random = new Random();
+  bool anadir = true;
+  int contador = 0;
   List<AnimatedContainer> fantasmitas = [];
 
-  double generateRandom() {
+  @override
+  initState(){
+    startGame();
+  }
+
+  double generateRandomX() {
     return random.nextDouble() * 2 - 1;
   }
 
@@ -82,26 +89,24 @@ class _InicioState extends State<Inicio> {
     }
   }
 
-  List<AnimatedContainer> show() {
-    Timer(Duration(seconds: 10), () {
-      crear = true;
-      if (crear && fantasmitas.length < 10) {
-        fantasmitas.add(
-          AnimatedContainer(
-            duration: Duration(milliseconds: 0),
-            alignment: Alignment(generateRandom(), generateRandom()),
-            child: Fantasmita(),
-          ),
-        );
-        crear = false;
-        print("size: " + fantasmitas.length.toString());
-      }
-    });
-    return fantasmitas;
+  void startGame() {
+    fantasmitas.add(
+      AnimatedContainer(
+        duration: Duration(milliseconds: 0),
+        alignment: Alignment(generateRandomX(), 1),
+        child: Fantasmita(),
+      ),
+    );
+    if(fantasmitas.length < 10) {
+      Timer(Duration(seconds: 3), () {
+        startGame();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.blueGrey,
@@ -133,7 +138,7 @@ class _InicioState extends State<Inicio> {
                       child: Rayo(),
                     ),
                     Stack(
-                      children: show(),
+                      children: fantasmitas,
                     ),
                   ],
                 ),
