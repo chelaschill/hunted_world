@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hunted_world/fantasmita.dart';
 import 'package:hunted_world/rayo.dart';
+import 'ghoul.dart';
 import 'wizard.dart';
 import 'dart:math';
 
@@ -26,10 +27,12 @@ class _InicioState extends State<Inicio> {
   bool anadir = true;
   int contador = 0;
   List<AnimatedContainer> fantasmitas = [];
+  List<AnimatedContainer> ghouls = [];
 
   @override
-  initState(){
-    startGame();
+  initState() {
+    addFantasmita();
+    addGhoul();
   }
 
   double generateRandomX() {
@@ -89,24 +92,44 @@ class _InicioState extends State<Inicio> {
     }
   }
 
-  void startGame() {
-    fantasmitas.add(
-      AnimatedContainer(
-        duration: Duration(milliseconds: 0),
-        alignment: Alignment(generateRandomX(), 1),
-        child: Fantasmita(),
-      ),
-    );
-    if(fantasmitas.length < 10) {
+  void addFantasmita() {
+    print("fantasmitas: " + fantasmitas.length.toString());
+    if (fantasmitas.length < 10) {
       Timer(Duration(seconds: 3), () {
-        startGame();
+        setState(() {
+          fantasmitas.add(
+            AnimatedContainer(
+              duration: Duration(milliseconds: 0),
+              alignment: Alignment(generateRandomX(), 1),
+              child: Fantasmita(),
+            ),
+          );
+        });
+        addFantasmita();
+      });
+    }
+  }
+
+  void addGhoul() {
+    print("ghouls: " + ghouls.length.toString());
+    if (ghouls.length < 5) {
+      Timer(Duration(seconds: 8), () {
+        setState(() {
+          ghouls.add(
+            AnimatedContainer(
+              duration: Duration(milliseconds: 0),
+              alignment: Alignment(generateRandomX(), 1),
+              child: Ghoul(),
+            ),
+          );
+        });
+        addGhoul();
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.blueGrey,
@@ -139,6 +162,9 @@ class _InicioState extends State<Inicio> {
                     ),
                     Stack(
                       children: fantasmitas,
+                    ),
+                    Stack(
+                      children: ghouls,
                     ),
                   ],
                 ),
